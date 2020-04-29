@@ -16,14 +16,23 @@
     <main class="container">
       <div class="subtitles">
         <p>🏠 = o elemento ficou em casa</p>
-        <p>👤 = o elemento está na rua e saudável</p>
-        <p>🤒 = o elemento está na rua e doente</p>
+        <p>👤 = o elemento está na rua não teve contato com o virús</p>
+        <p>🤢 = o elemento está na rua e doente</p>
+        <p>💀 = o elemento morreu</p>
+        <p>😇 = o elemento se curou</p>
+
         <p>Número de ciclos: <span id="cicles">0</span></p>
       </div>
-      <div class="input-group row" style="margin: 0 0 10px 20px">
+      <div class="form-check row" style="margin: 0 0 10px 20px;">
         <input type="checkbox" class="form-check-input" id="limitMove" />
         <label class="form-check-label" for="limitMove"
           >Aumentar número de pessoas em casa</label
+        >
+      </div>
+      <div class="form-check row" style="margin: 0 0 10px 20px;">
+        <input type="checkbox" class="form-check-input" id="timeEnvolved" />
+        <label class="form-check-label" for="timeEnvolved"
+          >Continuar ciclo até todo mundo ter tido contato com o virús</label
         >
       </div>
       <div class="row btn-group ml-auto">

@@ -1,9 +1,9 @@
 var matrix = [];
 var probSick = 0.7;
-var probHeal = 0.5;
+var probHeal = 0.3;
+var probDeath = 0.7;
 var arraySize = 15;
 var numInfec = 1;
-var curePeople = false;
 var divM = document.getElementById("matrix");
 var spanCicles = document.getElementById("cicles");
 var ciclos = 0;
@@ -46,7 +46,7 @@ function createArray() {
           el = 2;
         }
       } else {
-        if (probability(0.70)) {
+        if (probability(0.7)) {
           if (numInfec > 0) {
             if (probability(0.5)) {
               el = 1;
@@ -64,39 +64,76 @@ function createArray() {
 
 function drawArray() {
   document.getElementById("limitMove").disabled = true;
+  document.getElementById("timeEnvolved").disabled = true;
   document.getElementById("clear").disabled = true;
   document.getElementById("run").disabled = true;
   if (!matrix.some((el) => el.some((el) => el === 1))) {
     alert("Não há ninguém doente!🎉🥳");
+    document.getElementById("limitMove").disabled = false;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("run").disabled = false;
+    document.getElementById("timeEnvolved").disabled = false;
+    clearScreen();
   } else {
     divM.innerHTML = "";
     divM.style.opacity = 1;
     for (let i = 0; i < arraySize; i++) {
       for (let j = 0; j < arraySize; j++) {
         if (matrix[i][j] === 1) {
-          divM.innerHTML += `<div class="infected">🤒</div>`;
+          divM.innerHTML += `<div class="infected">🤢</div>`;
         } else if (matrix[i][j] === 2) {
           divM.innerHTML += `<div class="empty">🏠</div>`;
+        } else if (matrix[i][j] === 3) {
+          divM.innerHTML += `<div class="empty">💀</div>`;
+        } else if (matrix[i][j] === 4) {
+          divM.innerHTML += `<div class="empty">😇</div>`;
         } else {
           divM.innerHTML += `<div class="healthy">👤</div>`;
         }
       }
       divM.innerHTML += `<br/>`;
     }
-    setTimeout(() => {
-      if (hasHealthy(matrix)) {
-        spanCicles.innerHTML = `${ciclos}`;
-        ciclos++;
-        matrix = infectPeople(matrix);
-        matrix = shuffle(matrix);
-        drawArray();
-      } else {
-        alert("Todo mundo que andava pelas ruas ficou doente 💀");
-        document.getElementById("limitMove").disabled = false;
-        document.getElementById("clear").disabled = false;
-        document.getElementById("run").disabled = false;
-      }
-    }, 2000);
+    if (document.getElementById("timeEnvolved").checked) {
+      setTimeout(() => {
+        if (hasSickOrHealthy(matrix)) {
+          spanCicles.innerHTML = `${ciclos}`;
+          ciclos++;
+          if (hasHealthy(matrix)) {
+            [1, 2, 3, 4].forEach(function (i) {
+              matrix = infectPeople(matrix);
+            });
+          }
+          matrix = healPeople(matrix);
+          matrix = killPeople(matrix);
+          matrix = shuffle(matrix);
+          drawArray();
+        } else {
+          alert(
+            "Todo mundo que andava pelas ruas teve contato com o vírus❗🤡🦠"
+          );
+          document.getElementById("limitMove").disabled = false;
+          document.getElementById("clear").disabled = false;
+          document.getElementById("run").disabled = false;
+          document.getElementById("timeEnvolved").disabled = false;
+        }
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        if (hasHealthy(matrix)) {
+          spanCicles.innerHTML = `${ciclos}`;
+          ciclos++;
+          matrix = infectPeople(matrix);
+          matrix = shuffle(matrix);
+          drawArray();
+        } else {
+          alert("Todo mundo que andava pelas ruas ficou doente❗🤡🦠");
+          document.getElementById("limitMove").disabled = false;
+          document.getElementById("clear").disabled = false;
+          document.getElementById("run").disabled = false;
+          document.getElementById("timeEnvolved").disabled = false;
+        }
+      }, 2000);
+    }
   }
 }
 
@@ -117,6 +154,17 @@ function shuffle(array) {
 
 function hasHealthy(array) {
   return array.some((el) => el.some((el) => el === 0));
+}
+
+function hasSickOrHealthy(array) {
+  if (
+    array.some((el) => el.some((el) => el === 0)) ||
+    array.some((el) => el.some((el) => el === 1))
+  ) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function infectPeople(array) {
@@ -147,19 +195,37 @@ function infectPeople(array) {
 }
 
 function healPeople(array) {
-  return array.map((item1, index1, array1) =>
-    item1.map((item2, index2, array2) => {
-      item2 = item2;
+  return array.map((item) =>
+    item.map((item) => {
+      item = item;
       try {
-        if (item2 !== 2) {
-          if (item2 === 1) {
+        if (item !== 2) {
+          if (item === 1) {
             if (probability(probHeal)) {
-              item2 = 0;
+              item = 4;
             }
           }
         }
       } catch (error) {}
-      return item2;
+      return item;
+    })
+  );
+}
+
+function killPeople(array) {
+  return array.map((item) =>
+    item.map((item) => {
+      item = item;
+      try {
+        if (item !== 2) {
+          if (item === 1) {
+            if (probability(probDeath)) {
+              item = 3;
+            }
+          }
+        }
+      } catch (error) {}
+      return item;
     })
   );
 }
