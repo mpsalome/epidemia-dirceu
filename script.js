@@ -115,8 +115,9 @@ function drawArray() {
           spanCicles.innerHTML = `${ciclos}`;
           ciclos++;
           if (hasHealthy(matrix)) {
-            [1, 2, 3, 4].forEach(function (i) {
+            [1, 2, 3, 4].forEach(() => {
               matrix = infectPeople(matrix);
+              ciclos++;
             });
           }
           matrix = healPeople(matrix);
@@ -188,7 +189,7 @@ function infectPeople(array) {
     item1.map((item2, index2, array2) => {
       item2 = item2;
       try {
-        if (item2 !== 2) {
+        if (item2 !== 2 || item2 !== 3 || item2 !== 4 ) {
           if (
             array2[index2 + 1] === 1 || //item à esquerda na matriz
             array2[index2 - 1] === 1 || //item à direita na matriz
