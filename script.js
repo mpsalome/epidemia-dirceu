@@ -68,27 +68,43 @@ function drawArray() {
   document.getElementById("clear").disabled = true;
   document.getElementById("run").disabled = true;
   if (!matrix.some((el) => el.some((el) => el === 1))) {
+    console.log(matrix);
+    divM.innerHTML = "";
+    for (let i = 0; i < arraySize; i++) {
+      for (let j = 0; j < arraySize; j++) {
+        if (matrix[i][j] === 1) {
+          divM.innerHTML += `<div class="element">🤢</div>`;
+        } else if (matrix[i][j] === 2) {
+          divM.innerHTML += `<div class="element">🏠</div>`;
+        } else if (matrix[i][j] === 3) {
+          divM.innerHTML += `<div class="element">💀</div>`;
+        } else if (matrix[i][j] === 4) {
+          divM.innerHTML += `<div class="element">😇</div>`;
+        } else {
+          divM.innerHTML += `<div class="element">👤</div>`;
+        }
+      }
+      divM.innerHTML += `<br/>`;
+    }
     alert("Não há ninguém doente!🎉🥳");
     document.getElementById("limitMove").disabled = false;
     document.getElementById("clear").disabled = false;
     document.getElementById("run").disabled = false;
     document.getElementById("timeEnvolved").disabled = false;
-    clearScreen();
   } else {
     divM.innerHTML = "";
-    divM.style.opacity = 1;
     for (let i = 0; i < arraySize; i++) {
       for (let j = 0; j < arraySize; j++) {
         if (matrix[i][j] === 1) {
-          divM.innerHTML += `<div class="infected">🤢</div>`;
+          divM.innerHTML += `<div class="element">🤢</div>`;
         } else if (matrix[i][j] === 2) {
-          divM.innerHTML += `<div class="empty">🏠</div>`;
+          divM.innerHTML += `<div class="element">🏠</div>`;
         } else if (matrix[i][j] === 3) {
-          divM.innerHTML += `<div class="empty">💀</div>`;
+          divM.innerHTML += `<div class="element">💀</div>`;
         } else if (matrix[i][j] === 4) {
-          divM.innerHTML += `<div class="empty">😇</div>`;
+          divM.innerHTML += `<div class="element">😇</div>`;
         } else {
-          divM.innerHTML += `<div class="healthy">👤</div>`;
+          divM.innerHTML += `<div class="element">👤</div>`;
         }
       }
       divM.innerHTML += `<br/>`;
